@@ -15,7 +15,7 @@ document.getElementById('getAnalysis').addEventListener('click', async () => {
         const authHeader = 'Basic ' + btoa(username + ':' + password);
 
         // 发送请求到代理服务器
-        const response = await fetch('https://8.134.166.199:8888/api/v1/tongue-diagnosis', {
+        const response = await fetch('http://8.134.166.199:8888/api/v1/tongue-diagnosis', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
