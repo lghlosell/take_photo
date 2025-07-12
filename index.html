@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分析舌像</title>
+    <style>
+        body{
+            background-image: url('/take_photos/background1.png');
+            background-size: 100vw 100vh;
+        }
+        #uploadedImage{
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 2px solid gray;
+        }
+        .analysis{
+            margin-top: 20px;
+            background-color: beige;
+            padding: 30px;
+            width: 70vw;
+            border-radius: 20px;
+            border: 2px solid black;
+        }
+        .main-container{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #getAnalysis{
+            margin-top: 10px;
+            width: 120px;
+            height: 36px;
+            font-size: 16px;
+        }
+    </style>
+    <link rel="stylesheet" href="/take_photos/index.css">
+</head>
+<body>
+    <div class="main-container">
+        <h1>分析舌像</h1>
+
+        <div class="photo-content">
+            <video id="video" autoplay></video>
+            <img src="/take_photos/p7.png" alt="" id="capture">
+            <canvas id="canvas" style="display:none;"></canvas>
+            <img id="photo" alt="Photo" style="display:none;  border: 1px solid #ccc;">
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            <button id="selectFile">选择本地图片</button>
+            <button id="again">再拍一张</button>
+            <!-- <button id="sure">确定</button> -->
+            <!-- <div id="photo-count" style="margin-top: 20px; font-size: 18px; color: #50747c;"></div> -->
+        </div>
+        <img id="uploadedImage" style="max-width: 100%; height: auto; display: none;" alt="上传的图片">
+        <button id="getAnalysis">分析舌像</button>
+        <div class="analysis"><p id="Analysis"></p></div>
+
+    </div>
+    <script src="/take_photos/app.js"></script>
+</body>
+
+<script>
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  const photo = document.getElementById('photo');
+  const capture = document.getElementById('capture');
+  const again = document.getElementById('again');
+  const sure = document.getElementById('sure');
+  const fileInput = document.getElementById('fileInput');
+  const selectFileButton = document.getElementById('selectFile');
+  const photoCountDisplay = document.getElementById('photo-count'); // 获取显示序数的元素
+
+  // 请求摄像头权限并显示视频流
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      video.srcObject = stream;
+    })
+    .catch(err => {
+      console.error('Error accessing camera:', err);
+      alert('无法访问摄像头，请检查权限设置');
+    });
+
+  // 初始化序数显示
+  function updatePhotoCountDisplay() {
+    let photoCount = localStorage.getItem('photoCount');
+    if (!photoCount) {
+      photoCount = 1;
+    } else {
+      photoCount = parseInt(photoCount, 10);
+    }
+    photoCountDisplay.textContent = `当前拍照序数: ${photoCount}`;
+  }
+
+  // 拍照功能
+  capture.addEventListener('click', () => {
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    const url = canvas.toDataURL('image/png');
+    photo.src = url;
+    photo.style.display = 'block';
+    video.style.display = 'none';
+    capture.style.display = 'none';
+    selectFileButton.style.display = 'none';
+    again.style.display = 'block';
+    sure.style.display = 'block';
+
+    // 更新拍照序数并保存到 localStorage
+    let photoCount = localStorage.getItem('photoCount');
+    if (!photoCount) {
+      photoCount = 1;
+    } else {
+      photoCount = (parseInt(photoCount, 10) % 3) + 1;
+    }
+    localStorage.setItem('photoCount', photoCount);
+
+    // 更新显示的序数
+    updatePhotoCountDisplay();
+
+    // 将图片存储到 localStorage 并添加标识
+    localStorage.setItem('capturedImage', url);
+    localStorage.setItem('imageSource', 'camera'); // 标识图片来自摄像头拍摄
+    console.log('Stored image URL (camera):', url);
+  });
+
+  // 再拍一张功能
+  again.addEventListener('click', () => {
+    location.reload(); // 刷新页面
+  });
+
+  // 选择本地图片功能
+  selectFileButton.addEventListener('click', () => {
+    fileInput.click(); // 触发文件选择框
+  });
+
+  // 选择本地图片功能
+  fileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        photo.src = e.target.result;
+        photo.style.display = 'block';
+        video.style.display = 'none';
+        capture.style.display = 'none';
+        selectFileButton.style.display = 'none';
+        again.style.display = 'block';
+        sure.style.display = 'block';
+
+        // 更新拍照序数并保存到 localStorage
+        let photoCount = localStorage.getItem('photoCount');
+        if (!photoCount) {
+          photoCount = 1;
+        } else {
+          photoCount = (parseInt(photoCount, 10) % 3) + 1;
+        }
+        localStorage.setItem('photoCount', photoCount);
+
+        // 更新显示的序数
+        updatePhotoCountDisplay();
+
+        // 将本地上传的图片存储到 localStorage 并添加标识
+        localStorage.setItem('capturedImage', e.target.result);
+        localStorage.setItem('imageSource', 'upload'); // 标识图片来自本地上传
+        console.log('Stored image URL (upload):', e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // 确定按钮功能
+  document.addEventListener('DOMContentLoaded', function() {
+    const sureButton = document.getElementById('sure');
+
+    sureButton.addEventListener('click', function() {
+        // 替换'URL_TO_REDIRECT'为你想要跳转的页面的URL
+        window.location.href = 'http://localhost:5173/#/pages/analyse/analyse';
+    });
+
+    // 初始化序数显示
+    updatePhotoCountDisplay();
+  });
+</script>
+</html>

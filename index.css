@@ -1,0 +1,164 @@
+
+video, canvas {
+	width: 360px;
+	height: 360px;
+	border: 1px solid #ccc;
+	  
+ }
+
+#video{
+	width: 360px;
+	height: 360px;
+	border-radius: 50%; /* 使视频显示为圆形 */
+	object-fit: cover; /* 确保视频填充整个容器 */
+}
+#photo{
+	border-radius: 50%;
+	width: 360px;
+	height: 360px;
+	border: 1px solid #ccc;
+}
+
+
+.rectangle {
+  height: 60px;
+  margin-right: 10px; /* 与圆形picture之间的间距 */
+}
+
+.circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: bold;
+  flex-grow: 1; /* 占据剩余空间 */
+  text-align: center; /* 文本居中 */
+}
+.main-container{
+	display: flex;
+}
+
+
+.main-content {
+  grid-area: main;
+  background-color: #a4acac;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.capture-area {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.camera-container {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.camera-feed-wrapper {
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 5px solid #4a6178;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.camera-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.control-button {
+  padding: 10px 20px;
+  background-color: transparent;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.2s;
+}
+
+.results-area, .error-area {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #4a6178;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 600px;
+  text-align: left;
+  color: #e0e0e0;
+}
+
+.error-area {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+a{
+	color: black; /* 设置文字颜色为黑色 */
+	text-decoration: none; /* 添加下划线 */
+}
+
+.photo-container{
+	background-color: #a4acac;
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+
+}
+.photo-content{
+	margin-top: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+#capture{
+	margin-top:10px;
+	width: 70px;
+	cursor: pointer;
+	/* padding: 10px; */
+}
+#selectFile,#again,#sure{
+	margin-top: 20px;
+  width: 100px;
+  height: 36px;
+	font-size: 16px;
+}
+#selectFile{
+  width: 120px;
+}
+#again,#sure{
+	display: none;
+}
+.left{
+	margin-top: 50px;
+	/* width: 20%; */
+	font-size: large;
+}
+.right{
+	margin-top: 50px;
+	font-size: large;
+}
